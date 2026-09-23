@@ -1,0 +1,2 @@
+CREATE DATABASE account_a;
+CREATE DATABASE account_b;
