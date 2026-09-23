@@ -76,9 +76,9 @@ saga-transfer/
 
 ## Roadmap
 
-- [ ] Fundacao: multi-modulo + common (envelope, outbox, idempotencia)
-- [ ] account-a e account-b: debitar/creditar/estornar, cada um com seu Postgres
-- [ ] Saga COREOGRAFADA: eventos entre A e B, com compensacao
-- [ ] Saga ORQUESTRADA: orquestrador com maquina de estados
-- [ ] Testes: fluxo feliz e fluxo de compensacao (falha no credito)
-- [ ] ADR comparando os dois estilos na pratica
+- [x] Fundacao: multi-modulo Gradle + Version Catalog + common (envelope, outbox, idempotencia)
+- [x] account-a e account-b: debitar/creditar/estornar, cada um com seu Postgres
+- [x] Saga COREOGRAFADA: eventos entre A e B (fluxo feliz validado ponta a ponta)
+- [ ] Testar o fluxo de compensacao (credito falha -> estorno no A)
+- [ ] Saga ORQUESTRADA: orquestrador com maquina de estados (modulo orchestrator)
+- [ ] Testes automatizados (Testcontainers) dos dois fluxos
