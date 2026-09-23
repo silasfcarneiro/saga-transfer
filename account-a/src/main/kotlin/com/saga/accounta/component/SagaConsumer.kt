@@ -1,4 +1,4 @@
-package com.saga.accounta.consumer
+package com.saga.accounta.component
 
 import com.saga.accounta.service.AccountService
 import com.saga.common.TransferRequested

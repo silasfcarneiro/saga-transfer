@@ -16,9 +16,9 @@ class OutboxRelay(
     @Scheduled(fixedDelay = 500)
     @Transactional
     fun publishPending() {
-        val pending = outboxRepository.findByPublishedAtIsNull()
-        for (event in pending) {
-            kafkaTemplate.send(event.topic, event.sagaId.toString(), event.payload)
+        outboxRepository.findByPublishedAtIsNull().forEach { event ->
+            val envelope = """{"eventId":"${event.id}","eventType":"${event.eventType}","sagaId":"${event.sagaId}","payload":${event.payload}}"""
+            kafkaTemplate.send(event.topic, event.sagaId.toString(), envelope)
             event.publishedAt = Instant.now()
         }
     }
