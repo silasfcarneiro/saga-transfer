@@ -7,8 +7,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":common"))                   // <- depende do common!
-
+    implementation(project(":common"))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.spring.boot.starter.flyway)
@@ -17,7 +16,6 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     runtimeOnly(libs.postgresql)
-
     testImplementation(libs.spring.boot.starter.test)
 }
 
