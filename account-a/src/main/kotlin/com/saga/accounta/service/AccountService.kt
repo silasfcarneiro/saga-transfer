@@ -1,5 +1,6 @@
 package com.saga.accounta.service
 
+import com.saga.accounta.dto.CreateTransferRequest
 import com.saga.accounta.repository.AccountRepository
 import com.saga.accounta.repository.OutboxRepository
 import com.saga.accounta.repository.ProcessedEventRepository
@@ -7,6 +8,7 @@ import com.saga.common.Debited
 import com.saga.common.DebitReverted
 import com.saga.common.OutboxEvent
 import com.saga.common.ProcessedEvent
+import com.saga.common.TransferRequested
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import tools.jackson.databind.ObjectMapper
@@ -53,6 +55,18 @@ class AccountService(
 
         publish(sagaId, "DebitReverted", DebitReverted(account.id, amount))
         markProcessed(eventId)
+    }
+
+    @Transactional
+    fun startTransfer(request: CreateTransferRequest): UUID {
+        val sagaId = UUID.randomUUID()
+        val payload = TransferRequested(
+            request.sourceAccountId,
+            request.targetAccountId,
+            request.amount
+        )
+        publish(sagaId, "TransferRequested", payload)
+        return sagaId
     }
 
     // ---------- privados ----------

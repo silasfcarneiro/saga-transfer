@@ -15,12 +15,19 @@ dependencies {
     implementation(libs.flyway.database.postgresql)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     runtimeOnly(libs.postgresql)
+
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.mockito.kotlin)
 }
 
 allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+}
+
+tasks.named<Jar>("jar") {
+    enabled = false
 }
