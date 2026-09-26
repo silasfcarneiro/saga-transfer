@@ -74,11 +74,30 @@ saga-transfer/
 - [0001 - Saga em vez de transacao distribuida (2PC)](docs/architecture/decisions/0001-saga-vs-2pc.md)
 - [0002 - Coreografada vs Orquestrada](docs/architecture/decisions/0002-coreografada-vs-orquestrada.md)
 
+## Endpoints
+
+| Metodo | Rota | Resposta |
+|---|---|---|
+| POST | `/transfers` (Banco A) | 202 Accepted `{sagaId}` - inicia a saga (assincrona) |
+
+## Testes
+
+```bash
+./gradlew :account-a:test    # unitarios do Banco A + E2E
+./gradlew :account-b:test    # unitarios do Banco B
+```
+
+- **Unitarios** (mock): logica de debito, credito, compensacao e idempotencia.
+- **E2E** (Testcontainers): sobe Postgres + Kafka + os dois servicos em
+  containers, dispara a saga por HTTP e verifica a propagacao entre os bancos.
+  Ver [ADR 0006](docs/architecture/decisions/0006-testes-e-rede-entre-containers.md).
+
 ## Roadmap
 
-- [x] Fundacao: multi-modulo Gradle + Version Catalog + common (envelope, outbox, idempotencia)
+- [x] Fundacao: multi-modulo Gradle + Version Catalog + common
 - [x] account-a e account-b: debitar/creditar/estornar, cada um com seu Postgres
-- [x] Saga COREOGRAFADA: eventos entre A e B (fluxo feliz validado ponta a ponta)
-- [ ] Testar o fluxo de compensacao (credito falha -> estorno no A)
+- [x] Saga COREOGRAFADA: eventos entre A e B, com compensacao
+- [x] Endpoint REST iniciando a saga (POST /transfers, 202 + Outbox)
+- [x] Testes unitarios (logica) e E2E com Testcontainers (4 containers)
 - [ ] Saga ORQUESTRADA: orquestrador com maquina de estados (modulo orchestrator)
-- [ ] Testes automatizados (Testcontainers) dos dois fluxos
+- [ ] Testar explicitamente o fluxo de compensacao (credito falha -> estorno)
